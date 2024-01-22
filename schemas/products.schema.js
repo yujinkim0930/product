@@ -17,4 +17,8 @@ const productSchma = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  status: String,
+  createdAt: Date,
 });
+
+export default mongoose.model('Prod', productSchma);
