@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const productSchma = new mongoose.Schema({
   title: {
@@ -17,8 +17,7 @@ const productSchma = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  status: String,
-  createdAt: Date,
+  status: { type: String, enum: ["FOR_SALE", "SOLD_OUT"], default: "FOR_SALE" },
 });
 
-export default mongoose.model('Prod', productSchma);
+export default mongoose.model("Prod", productSchma);
