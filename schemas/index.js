@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 dotenv.config();
-console.log(process.env.DB_URL);
 
 const connect = () => {
   // mongoose.connect는 MongoDB 서버에 연결하는 메서드입니다.
