@@ -61,31 +61,36 @@ router.get("/products/:productId", async (req, res) => {
 
 // 상품 정보 수정
 router.put("/products/:productId", async (req, res) => {
-  const { productId } = req.params;
-  const { title, content, status, password } = req.body;
-  if (!title || !content || !status || !password) {
-    return res
-      .status(400)
-      .json({ errorMessage: "데이터 형식이 올바르지 않습니다." });
-  }
-  const prod = await Prod.findById(productId).exec();
-  if (!prod) {
-    return res.status(404).json({ message: "상품 조회에 실패하였습니다." });
-  }
+  try {
+    if (!req.body || !req.params) {
+      return res
+        .status(400)
+        .json({ errorMessage: "데이터 형식이 올바르지 않습니다." });
+    }
+    const { title, content, status, password } = req.body;
+    if (!title || !content || !status || !password) {
+      return res
+        .status(400)
+        .json({ errorMessage: "데이터 형식이 올바르지 않습니다." });
+    }
+    const Product = await Prod.findById(req.params.productId);
+    if (!Product) {
+      return res.status(404).json({ message: "상품 조회에 실패하였습니다." });
+    }
 
-  if (password) {
-    const prodPw = prod["password"];
-    if (prodPw !== password) {
+    if (password !== Product.password) {
       return res
         .status(401)
         .json({ message: "상품을 삭제할 권한이 존재하지 않습니다." });
     }
-    prod.title = title;
-    prod.content = content;
-    prod.status = status;
+    Product.title = title;
+    Product.content = content;
+    Product.status = status;
+    await prod.save();
+    return res.status(200).json({ message: "상품 정보를 수정하였습니다." });
+  } catch (error) {
+    res.status(500).json({ message: "예기치 못한 에러가 발생하였습니다." });
   }
-  await prod.save();
-  return res.status(200).json({ message: "상품 정보를 수정하였습니다." });
 });
 
 // 상품 삭제
