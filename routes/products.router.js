@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 import Prod from "../schemas/products.schema.js";
+import productsSchema from "../schemas/products.schema.js";
 
 // 상품 등록
 router.post("/products", async (req, res) => {
@@ -31,9 +32,14 @@ router.post("/products", async (req, res) => {
 
 // 상품 목록 조회
 router.get("/products", async (req, res) => {
-  const products = await Prod.find().sort("-createdAt").exec();
-
-  return res.status(200).json({ products });
+  try {
+    const Products = await Prod.find()
+      .select("_id title author status createdAt")
+      .sort({ createdAt: -1 });
+    res.json(Products);
+  } catch (error) {
+    res.status(500).json({ message: "예기치 못한 에러가 발생하였습니다." });
+  }
 });
 
 // 상품 상세 조회
