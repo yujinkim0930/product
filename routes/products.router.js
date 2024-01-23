@@ -86,7 +86,7 @@ router.put("/products/:productId", async (req, res) => {
     Product.title = title;
     Product.content = content;
     Product.status = status;
-    await prod.save();
+    await Product.save();
     return res.status(200).json({ message: "상품 정보를 수정하였습니다." });
   } catch (error) {
     res.status(500).json({ message: "예기치 못한 에러가 발생하였습니다." });
