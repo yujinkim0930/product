@@ -27,6 +27,7 @@ router.post('/products', async (req, res) => {
 // 상품 목록 조회
 router.get('/products', async (req, res) => {
   const products = await Prod.find().sort('-createdAt').exec();
+
   return res.status(200).json({ products });
 });
 
