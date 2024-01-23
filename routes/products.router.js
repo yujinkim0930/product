@@ -44,12 +44,19 @@ router.get("/products", async (req, res) => {
 
 // 상품 상세 조회
 router.get("/products/:productId", async (req, res) => {
-  const { productId } = req.params;
-  const selectProd = await Prod.findById(productId).exec();
-  if (!selectProd) {
-    return res.status(404).json({ message: "상품 조회에 실패하였습니다." });
+  try {
+    const Product = await Prod.findById(req.params.productId).select(
+      "_id title author content status createdAt"
+    );
+    if (!Product) {
+      return res
+        .status(404)
+        .json({ errorMessage: "상품 조회에 실패하였습니다." });
+    }
+    res.json(Product);
+  } catch (error) {
+    res.status(500).json({ message: "예기치 못한 에러가 발생하였습니다." });
   }
-  return res.status(200).json({ selectProd });
 });
 
 // 상품 정보 수정
