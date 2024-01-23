@@ -114,7 +114,7 @@ router.delete("/products/:productId", async (req, res) => {
         .json({ message: "상품을 삭제할 권한이 존재하지 않습니다." });
     }
 
-    await prod.deleteOne({ id: productId });
+    await Product.deleteOne({ id: productId });
     return res.status(200).json({ message: "상품을 삭제하였습니다." });
   } catch (error) {
     res.status(500).json({ message: "예기치 못한 에러가 발생하였습니다." });
